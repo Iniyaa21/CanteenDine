@@ -1,4 +1,5 @@
-import "../css/DishCard.css"
+import "../css/DishCard.css";
+
 type Dish = {
     id: number;
     name: string;
@@ -8,19 +9,21 @@ type Dish = {
 
 function DishCard({ Dish }: { Dish: Dish }) {
     function onAddToCart() {
-        alert("Clicked");
+        alert(`${Dish.name} added to cart!`);
     }
 
     return (
         <div className="dish-card">
-            <div className="dish-image">
+            <div className="dish-poster">
                 <img src={Dish.imageUrl} alt={Dish.name} />
                 <div className="dish-overlay">
-                    <button className="add-to-cart" onClick={onAddToCart}>Add to Cart</button>
+                    <button className="cart-btn" onClick={onAddToCart}>
+                        +
+                    </button>
                 </div>
             </div>
             <div className="dish-info">
-                <h2>{Dish.name}</h2>
+                <h3>{Dish.name}</h3>
                 <p>{Dish.description}</p>
             </div>
         </div>
