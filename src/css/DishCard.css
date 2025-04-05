@@ -53,10 +53,9 @@
 .cart-btn {
   position: absolute;
   right: 1rem;
-  margin-top: 1rem;
   color: white;
   font-size: 1.5rem;
-  padding: 0.5rem;
+  padding: 1.5rem;
   background-color: rgba(106, 239, 237, 0.821);
   border-radius: 50%;
   width: 40px;
@@ -71,8 +70,15 @@
   background-color: rgba(113, 211, 181, 0.8);
 }
 
-.cart-btn.active {
-  color: #ff4757;
+.increment-btn, .decrement-btn{
+  background-color: rgba(106, 239, 237, 0.821);
+  color: white;
+  padding: 0.5rem;
+  margin: 5px 10px;
+  font-size: larger;
+  border-radius: 60px;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .rating-select {
@@ -109,6 +115,47 @@
   color: #ffd700;
   font-size: 0.9rem;
   margin-top: auto;
+}
+
+.quantity-container {
+  display: flex; /* Align items in a single row */
+  align-items: center; /* Vertically center all items */
+  justify-content: center; /* Center the controls horizontally */
+  gap: 0.5rem; /* Add spacing between buttons and quantity */
+  margin-top: 1rem; /* Add spacing above the container */
+}
+
+.cart-btn,
+.decrement-btn,
+.increment-btn,
+.confirm-btn {
+  width: 40px; /* Ensure all buttons have the same width */
+  height: 40px; /* Ensure all buttons have the same height */
+  font-size: 1.5rem; /* Adjust font size for consistency */
+  background-color: rgba(106, 239, 237, 0.821); /* Button background color */
+  color: white; /* Button text color */
+  border: none; /* Remove default border */
+  border-radius: 50%; /* Make buttons circular */
+  display: flex;
+  align-items: center; /* Center content inside the button */
+  justify-content: center; /* Center content inside the button */
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.cart-btn:hover,
+.decrement-btn:hover,
+.increment-btn:hover,
+.confirm-btn:hover {
+  background-color: rgba(113, 211, 181, 0.8); /* Change background color on hover */
+}
+
+.quantity {
+  font-size: 1.2rem; /* Slightly larger font size for better readability */
+  font-weight: bold; /* Make the quantity text bold */
+  color: #333; /* Quantity text color */
+  min-width: 2rem; /* Ensure consistent width for alignment */
+  text-align: center; /* Center-align the quantity text */
 }
 
 @media (max-width: 768px) {
