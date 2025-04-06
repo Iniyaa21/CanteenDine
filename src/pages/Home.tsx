@@ -4,7 +4,7 @@ import "../css/Home.css";
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<{ id: number; name: string; description: string; imageUrl: string; orders: number }[]>([]);
+  const [searchResults, setSearchResults] = useState<{ id: number; name: string; description: string; imageUrl: string; orders: number; }[]>([]);
 
   const dishes = [
     { id: 1, name: "Pizza", description: "Delicious cheese pizza", imageUrl: "/images/pizza.jpg", orders: 120 },
@@ -24,10 +24,14 @@ function Home() {
     { id: 15, name: "Brownie", description: "Chocolate brownie with nuts", imageUrl: "/images/brownie.jpg", orders: 155 },
   ];
 
+  // Function to get top 10 dishes sorted by orders
+  const getTopDishes = () => {
+    return [...dishes].sort((a, b) => b.orders - a.orders).slice(0, 10);
+  };
+
   useEffect(() => {
-    // Sort dishes by orders in descending order and display the top 10
-    const sortedDishes = [...dishes].sort((a, b) => b.orders - a.orders).slice(0, 10);
-    setSearchResults(sortedDishes);
+    // Set initial top 10 dishes on page load
+    setSearchResults(getTopDishes());
   }, []);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
@@ -35,18 +39,17 @@ function Home() {
 
     if (!searchQuery.trim()) {
       // Reset to top 10 dishes if search query is empty
-      const topDishes = [...dishes].sort((a, b) => b.orders - a.orders).slice(0, 10);
-      setSearchResults(topDishes);
+      setSearchResults(getTopDishes());
       return;
     }
 
     // Filter and sort dishes based on the search query
-    const results = dishes
+    const filteredResults = dishes
       .filter((dish) => dish.name.toLowerCase().includes(searchQuery.toLowerCase()))
       .sort((a, b) => b.orders - a.orders)
       .slice(0, 10);
 
-    setSearchResults(results);
+    setSearchResults(filteredResults);
   };
 
   return (
