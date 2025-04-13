@@ -8,7 +8,7 @@ type Dish = {
     imageUrl: string;
 };
 
-function DishCard({ Dish }: { Dish: Dish }) {
+function DishCard({ dish }: { dish: Dish }) {
     const [quantity, setQuantity] = useState<number>(0);
     const [inCart, setInCart] = useState<boolean>(false);
     
@@ -18,7 +18,7 @@ function DishCard({ Dish }: { Dish: Dish }) {
     }
     
     function confirmAddToCart() {
-        alert(`Added ${Dish.name} to cart!`);
+        alert(`Added ${dish.name} to cart!`);
         setInCart(false);
     }
     
@@ -45,7 +45,7 @@ function DishCard({ Dish }: { Dish: Dish }) {
         <div className="dish-card">
             <div className="dish-frame">
                 <div className="dish-poster">
-                    <img src={Dish.imageUrl} alt={Dish.name} />
+                    <img src={dish.imageUrl} alt={dish.name} />
                     <div className="dish-overlay">
                         {!inCart ? (
                             <button className="cart-btn" onClick={onAddToCart}>
@@ -66,8 +66,8 @@ function DishCard({ Dish }: { Dish: Dish }) {
                 </div>
             </div>
             <div className="dish-info">
-                <h3>{Dish.name}</h3>
-                <p>{Dish.description}</p>
+                <h3>{dish.name}</h3>
+                <p>{dish.description}</p>
             </div>
         </div>
     );
