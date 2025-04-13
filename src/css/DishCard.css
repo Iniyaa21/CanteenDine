@@ -65,13 +65,13 @@
   gap: 8px;
 }
 
-.cart-btn, .confirm-btn, .clear-btn, 
+.confirm-btn, .clear-btn, 
 .decrement-btn, .increment-btn {
   border: none;
   border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  font-size: 14px;
+  width: 45px;
+  height: 45px;
+  font-size: 18px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -82,7 +82,7 @@
 .cart-btn {
   background: #ff6b6b;
   color: white;
-  font-size: 18px;
+  font-size: 14px;
 }
 
 .cart-btn:hover {
