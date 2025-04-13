@@ -3,9 +3,10 @@ import Cart from "./pages/Cart";
 import Home from "./pages/Home";
 import { Routes, Route } from "react-router-dom";
 import NavBar from "./components/NavBar";
+import { CartProvider } from "./contexts/CartContext";
 function App() {
   return (
-    <div>
+    <CartProvider>
       <NavBar></NavBar>
       <main className="main-content">
         <Routes>
@@ -13,7 +14,7 @@ function App() {
           <Route path="/cart" element={<Cart />}></Route>
         </Routes>
       </main>
-    </div>
+    </CartProvider>
   );
 }
 
