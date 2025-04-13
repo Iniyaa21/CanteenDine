@@ -26,7 +26,7 @@ function Home() {
 
   // Function to get top 10 dishes sorted by orders
   const getTopDishes = () => {
-    return [...dishes].sort((a, b) => b.orders - a.orders).slice(0, 10);
+    return [...dishes].sort((a, b) => b.orders - a.orders).slice(0, 8);
   };
 
   useEffect(() => {

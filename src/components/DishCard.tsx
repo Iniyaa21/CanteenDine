@@ -13,7 +13,7 @@ function DishCard({ Dish }: { Dish: Dish }) {
     const [inCart, setInCart] = useState<boolean>(false);
     
     function onAddToCart() {
-        setInCart(true);
+        setInCart(true);    
         setQuantity(quantity + 1);
     }
     
@@ -49,7 +49,7 @@ function DishCard({ Dish }: { Dish: Dish }) {
                     <div className="dish-overlay">
                         {!inCart ? (
                             <button className="cart-btn" onClick={onAddToCart}>
-                                Add
+                                +
                             </button>
                         ) : (
                             <div className="quantity-container">
