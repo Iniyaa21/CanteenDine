@@ -67,22 +67,32 @@ function CartPage() {
             <div className="cart-items">
                 {cartItems.map((item) => (
                     <div key={item.id} className="cart-item">
+                        {/* Image Section */}
                         <img src={item.imageUrl} alt={item.name} className="cart-item-image" />
+
+                        {/* Details Section */}
                         <div className="cart-item-details">
-                            <h3>{item.name}</h3>
-                            <p>{item.description}</p>
-                            <div className="cart-item-quantity">
-                                <button onClick={() => decrementQuantity(item.id)}>-</button>
-                                <span>{item.quantity}</span>
-                                <button onClick={() => incrementQuantity(item.id)}>+</button>
+                            <div className="cart-item-header">
+                                <h3 className="cart-item-name">{item.name}</h3>
+                                <div className="cart-item-quantity">
+                                    <button onClick={() => decrementQuantity(item.id)}>-</button>
+                                    <span>{item.quantity}</span>
+                                    <button onClick={() => incrementQuantity(item.id)}>+</button>
+                                </div>
                             </div>
+                            <p className="cart-item-description">{item.description}</p>
+                            <p className="cart-item-price">${(item.price * item.quantity).toFixed(2)}</p>
                         </div>
+
+                        {/* Remove Button */}
                         <button className="remove-btn" onClick={() => removeItem(item.id)}>
                             Remove
                         </button>
                     </div>
                 ))}
             </div>
+
+            {/* Footer Section */}
             <div className="cart-footer">
                 <div className="cart-total">
                     <span>Total:</span>

@@ -1,57 +1,81 @@
+/* General Cart Styles */
 .cart {
   display: flex;
   flex-direction: column;
-  height: 80vh; /* Full viewport height */
-  padding: 0;
+  height: 80vh;
+  padding: 1rem;
   width: 80%;
   box-sizing: border-box;
-  margin: 0 auto; /* Center horizontally */
+  margin: 0 auto;
 }
 
 .cart h2 {
-  margin: 1rem 0;
+  margin-bottom: 2rem;
   text-align: center;
   font-size: 2.5rem;
   color: #ffffff;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
+/* Cart Items Section */
 .cart-items {
   flex: 1;
-  overflow-y: auto; /* Scrollable if items exceed available space */
-  padding: 1rem;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
+/* Cart Item */
 .cart-item {
   display: flex;
-  align-items: center;
+  align-items: center; /* Vertically center all child elements */
   background-color: rgba(255, 255, 255, 0.05);
   padding: 1rem;
   border-radius: 12px;
+  gap: 1rem;
 }
 
-.cart-item-image {
-  width: 80px;
-  height: 80px;
-  object-fit: cover;
-  border-radius: 8px;
-  margin-right: 1rem;
-}
-
+/* Cart Item Details */
 .cart-item-details {
   flex: 1;
+  display: flex;
+  justify-content: space-between; /* Space between name/description and quantity controls */
+  align-items: center; /* Vertically center the content */
+  gap: 1rem;
   color: #ffffff;
 }
 
+/* Cart Item Header */
+.cart-item-header {
+  display: flex;
+  flex-direction: column; /* Stack name and description */
+  gap: 0.5rem;
+}
+
+.cart-item-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.cart-item-description {
+  font-size: 1rem;
+  color: #cccccc;
+  margin: 0;
+}
+
+.cart-item-price {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ff6b6b;
+}
+
+/* Quantity Controls */
 .cart-item-quantity {
   display: flex;
-  align-items: center;
+  align-items: center; /* Vertically center the buttons and quantity */
   gap: 0.5rem;
-  color: #ffffff;
-  margin-left: 1rem;
 }
 
 .cart-item-quantity button {
@@ -59,8 +83,8 @@
   color: white;
   border: none;
   border-radius: 50%;
-  width: 45px;
-  height: 45px;
+  width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -78,6 +102,7 @@
   font-weight: bold;
 }
 
+/* Remove Button */
 .remove-btn {
   background-color: #e50914;
   color: white;
@@ -85,59 +110,15 @@
   padding: 0.5rem 1rem;
   border-radius: 8px;
   cursor: pointer;
-  margin-left: 1rem;
   transition: background-color 0.3s ease;
+  align-self: center; /* Vertically center the button within the cart item */
 }
 
 .remove-btn:hover {
   background-color: #c40812;
 }
 
-.cart-empty {
-  text-align: center;
-  padding: 4rem 2rem;
-  background-color: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  margin: 2rem auto;
-  max-width: 600px;
-}
-
-.cart-empty h2 {
-  margin-bottom: 1rem;
-  font-size: 2rem;
-  color: #e50914;
-}
-
-.cart-empty p {
-  color: #999;
-  font-size: 1.2rem;
-  line-height: 1.6;
-}
-
-.dish-info {
-  text-align: left;
-  color: #ffffff;
-}
-
-.dish-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.dish-name {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin: 0;
-}
-
-.dish-price {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: #ff6b6b;
-  margin: 0;
-}
-
+/* Footer Section */
 .cart-footer {
   display: flex;
   justify-content: space-between;
