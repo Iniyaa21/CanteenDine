@@ -12,8 +12,16 @@ type Dish = {
 
 function Home() {
   const [searchQuery, setSearchQuery] = useState("");
+
   const [dishes, setDishes] = useState<Dish[]>([]); // State for storing dishes
   const [searchResults, setSearchResults] = useState<Dish[]>([]); // State for filtered dishes based on search query
+
+
+  // Function to get top 10 dishes sorted by orders
+  const getTopDishes = () => {
+    return [...dishes].sort((a, b) => b.orders - a.orders).slice(0, 8);
+  };
+
 
   // Fetch dishes from the backend API (Flask)
   useEffect(() => {

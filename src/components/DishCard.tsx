@@ -1,42 +1,59 @@
 import "../css/DishCard.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useCartContext } from "../contexts/CartContext";
 
 type Dish = {
     id: number;
     name: string;
     description: string;
     imageUrl: string;
+    price: number;
 };
 
-function DishCard({ dish }: { dish: Dish }) {
-    const [quantity, setQuantity] = useState<number>(0);
+function DishCard({ Dish }: { Dish: Dish }) {
+    const [quantity, setQuantity] = useState<number>(1);
     const [inCart, setInCart] = useState<boolean>(false);
-    
+    const { addToCart } = useCartContext();
+
+    // Check if the dish is already in the cart or localStorage and set the initial quantity
+    useEffect(() => {
+        const storedCart = localStorage.getItem("cart");
+        if (storedCart) {
+            const parsedCart = JSON.parse(storedCart);
+            const existingDish = parsedCart.find((item: any) => item.id === Dish.id);
+            if (existingDish) {
+                setQuantity(existingDish.quantity);
+                setInCart(true);
+            }
+        }
+    }, [Dish.id]);
+
     function onAddToCart() {
-        setInCart(true);    
-        setQuantity(quantity + 1);
+        setInCart(true);
+        setQuantity(1); // Start with a quantity of 1
     }
-    
+
     function confirmAddToCart() {
-        alert(`Added ${dish.name} to cart!`);
+
+        addToCart({ ...Dish, quantity }); // Reflect changes in the cart and localStorage
+        alert(`Added ${Dish.name} to cart!`);
         setInCart(false);
     }
-    
+
     function incrementQuantity() {
-        setQuantity(quantity + 1);
+        setQuantity((prevQuantity) => prevQuantity + 1); // Update quantity locally
     }
-    
+
     function decrementQuantity() {
         if (quantity > 1) {
-            setQuantity(quantity - 1);
+            setQuantity((prevQuantity) => prevQuantity - 1); // Update quantity locally
         } else {
-            alert("Item removed from cart");
             setInCart(false);
+            setQuantity(0);
         }
     }
-    
+
     function clearItem() {
-        alert("Item removed from cart");
         setInCart(false);
         setQuantity(0);
     }
@@ -66,8 +83,12 @@ function DishCard({ dish }: { dish: Dish }) {
                 </div>
             </div>
             <div className="dish-info">
-                <h3>{dish.name}</h3>
-                <p>{dish.description}</p>
+
+                <div className="dish-header">
+                    <h3 className="dish-name">{Dish.name}</h3>
+                    <p className="dish-price">${Dish.price.toFixed(2)}</p>
+                </div>
+                <p>{Dish.description}</p>
             </div>
         </div>
     );
