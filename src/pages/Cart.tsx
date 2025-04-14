@@ -7,6 +7,7 @@ type CartItem = {
     description: string;
     imageUrl: string;
     quantity: number;
+    price: number; // Add price to the CartItem type
 };
 
 function CartPage() {
@@ -46,6 +47,11 @@ function CartPage() {
         localStorage.setItem("cart", JSON.stringify(updatedCart)); // Update localStorage
     }
 
+    // Calculate the total price of items in the cart
+    const calculateTotal = () => {
+        return cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+    };
+
     if (cartItems.length === 0) {
         return (
             <div className="cart-empty">
@@ -76,6 +82,13 @@ function CartPage() {
                         </button>
                     </div>
                 ))}
+            </div>
+            <div className="cart-footer">
+                <div className="cart-total">
+                    <span>Total:</span>
+                    <span>${calculateTotal()}</span>
+                </div>
+                <button className="checkout-btn">Checkout</button>
             </div>
         </div>
     );

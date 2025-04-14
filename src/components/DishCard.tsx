@@ -23,14 +23,13 @@ function DishCard({ Dish }: { Dish: Dish }) {
             const existingDish = parsedCart.find((item: any) => item.id === Dish.id);
             if (existingDish) {
                 setQuantity(existingDish.quantity);
-                setInCart(true);
             }
         }
     }, [Dish.id]);
 
     function onAddToCart() {
         setInCart(true);
-        setQuantity(1); // Start with a quantity of 1
+        setQuantity(quantity); // Start with a quantity of 1
     }
 
     function confirmAddToCart() {
@@ -54,7 +53,7 @@ function DishCard({ Dish }: { Dish: Dish }) {
 
     function clearItem() {
         setInCart(false);
-        setQuantity(0);
+        setQuantity(1);
     }
 
     return (
