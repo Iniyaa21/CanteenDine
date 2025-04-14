@@ -1,4 +1,0 @@
-https://www.notion.so/Canteen-Dine-Mongo-db-1d4188971861803bba72c531f2dc8517
-
-Instead of "canteen_dine", I've used canteen-dine while creating the database.
-Do change it if your'e using canteen_dine.
