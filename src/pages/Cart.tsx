@@ -71,15 +71,19 @@ function CartPage() {
                         <div className="cart-item-details">
                             <h3>{item.name}</h3>
                             <p>{item.description}</p>
-                            <div className="cart-item-quantity">
-                                <button onClick={() => decrementQuantity(item.id)}>-</button>
-                                <span>{item.quantity}</span>
-                                <button onClick={() => incrementQuantity(item.id)}>+</button>
-                            </div>
+                            <span className="cart-item-price">${item.price.toFixed(2)}</span>
                         </div>
-                        <button className="remove-btn" onClick={() => removeItem(item.id)}>
-                            Remove
-                        </button>
+                        <div className="cart-item-controls">
+                        <div className="quantity-controls">
+                            <button className="quantity-btn" onClick={() => decrementQuantity(item.id)}>-</button>
+                            <span className="quantity-number">{item.quantity}</span>
+                            <button className="quantity-btn" onClick={() => incrementQuantity(item.id)}>+</button>
+                        </div>
+
+                            <button className="remove-btn" onClick={() => removeItem(item.id)}>
+                                Remove
+                            </button>
+                        </div>
                     </div>
                 ))}
             </div>

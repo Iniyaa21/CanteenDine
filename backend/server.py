@@ -5,7 +5,7 @@ from pymongo import MongoClient
 from datetime import datetime
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # MongoDB Connection
 client = MongoClient("mongodb://localhost:27017/")
