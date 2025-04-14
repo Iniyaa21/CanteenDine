@@ -34,6 +34,7 @@ function DishCard({ Dish }: { Dish: Dish }) {
     }
 
     function confirmAddToCart() {
+
         addToCart({ ...Dish, quantity }); // Reflect changes in the cart and localStorage
         alert(`Added ${Dish.name} to cart!`);
         setInCart(false);
@@ -61,7 +62,7 @@ function DishCard({ Dish }: { Dish: Dish }) {
         <div className="dish-card">
             <div className="dish-frame">
                 <div className="dish-poster">
-                    <img src={Dish.imageUrl} alt={Dish.name} />
+                    <img src={dish.imageUrl} alt={dish.name} />
                     <div className="dish-overlay">
                         {!inCart ? (
                             <button className="cart-btn" onClick={onAddToCart}>
@@ -82,6 +83,7 @@ function DishCard({ Dish }: { Dish: Dish }) {
                 </div>
             </div>
             <div className="dish-info">
+
                 <div className="dish-header">
                     <h3 className="dish-name">{Dish.name}</h3>
                     <p className="dish-price">${Dish.price.toFixed(2)}</p>
