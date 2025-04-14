@@ -67,7 +67,10 @@ function CartPage() {
             <div className="cart-items">
                 {cartItems.map((item) => (
                     <div key={item.id} className="cart-item">
+                        {/* Image Section */}
                         <img src={item.imageUrl} alt={item.name} className="cart-item-image" />
+
+                        {/* Details Section */}
                         <div className="cart-item-details">
                             <h3>{item.name}</h3>
                             <p>{item.description}</p>
@@ -84,9 +87,12 @@ function CartPage() {
                                 Remove
                             </button>
                         </div>
+
                     </div>
                 ))}
             </div>
+
+            {/* Footer Section */}
             <div className="cart-footer">
                 <div className="cart-total">
                     <span>Total:</span>
