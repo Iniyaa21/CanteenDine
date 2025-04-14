@@ -1,97 +1,125 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from pymongo import MongoClient
 from bson import ObjectId
+from pymongo import MongoClient
+from datetime import datetime
 
 app = Flask(__name__)
 CORS(app)
 
-# Connect to MongoDB
-client = MongoClient("mongodb://localhost:27017/")  
-db = client["canteen_db"]
-dishes_col = db["dishes"]
-cart_col = db["cart"]
+# MongoDB Connection
+client = MongoClient("mongodb://localhost:27017/")
+db = client["canteen_dine"]
 
-# Fetch Menu Items
+# Collections
+dishes_col = db["dishes"]
+users_col = db["users"]
+orders_col = db["orders"]
+transactions_col = db["transactions"]
+
+# -------------------- GET MENU --------------------
 @app.route('/menu', methods=['GET'])
 def get_menu():
-    dishes = list(dishes_col.find({}, {'_id': 0}))  # Exclude MongoDB's default _id
-    return jsonify(dishes)
+    dishes = list(dishes_col.find({}, {'_id': 0}))  # exclude MongoDB _id, show all other fields
+    return jsonify(dishes) 
 
-# Add Item to Cart (or Increase Quantity if Exists)
-@app.route('/cart', methods=['POST'])
-def add_to_cart():
-    data = request.json  # Expecting: {"dish_id": 1, "quantity": 2}
-    
-    existing_item = cart_col.find_one({"dish_id": data["dish_id"]})
-    
-    if existing_item:
-        new_quantity = existing_item["quantity"] + data["quantity"]
-        cart_col.update_one(
-            {"_id": existing_item["_id"]},
-            {"$set": {"quantity": new_quantity}}
-        )
-    else:
-        cart_col.insert_one({
-            "dish_id": data["dish_id"],
-            "quantity": data["quantity"]
+# -------------------- PLACE ORDER --------------------
+@app.route('/checkout', methods=['POST'])
+def place_order():
+    data = request.json
+    user_id = data.get('user_id')
+    dish_orders = data.get('dishes')
+
+    if not dish_orders:
+        return jsonify({"error": "No dishes provided"}), 400
+
+    total_amount = 0
+    order_dishes = []
+
+    for item in dish_orders:
+        dish = dishes_col.find_one({"id": item["dish_id"]})  # using custom dish id
+
+        if not dish:
+            return jsonify({"error": f'Dish not found: {item["dish_id"]}'}), 404
+
+        quantity = item["quantity"]
+        amount = quantity * dish["price"]
+        total_amount += amount
+
+        # Track what's being ordered
+        order_dishes.append({
+            "dishId": dish["id"],
+            "name": dish["name"],
+            "quantity": quantity,
+            "priceAtOrder": dish["price"]
         })
 
-    return jsonify({"message": "Item added to cart!"})
+        # Increment the 'orders' count for this dish
+        dishes_col.update_one({"id": item["dish_id"]}, {"$inc": {"orders": quantity}})
 
-# Fetch Cart Items
-@app.route('/cart', methods=['GET'])
-def get_cart():
-    pipeline = [
-        {
-            "$lookup": {
-                "from": "dishes",
-                "localField": "dish_id",
-                "foreignField": "id",
-                "as": "dish_info"
-            }
-        },
-        {"$unwind": "$dish_info"},
-        {
-            "$project": {
-                "cart_item_id": {"$toString": "$_id"},
-                "name": "$dish_info.name",
-                "price": "$dish_info.price",
-                "image_url": "$dish_info.image_url",
-                "quantity": 1,
-                "_id": 0
-            }
-        }
-    ]
-    cart_items = list(cart_col.aggregate(pipeline))
-    return jsonify(cart_items)
+    # Record transaction
+    transaction = {
+        "userId": user_id,
+        "amount": total_amount,
+        "paymentMethod": data.get("paymentMethod", "cash"),
+        "status": "completed",
+        "paymentDate": datetime.now(),
+        "phone": data.get("phone")
+    }
+    transaction_id = transactions_col.insert_one(transaction).inserted_id
 
-# Remove Item from Cart
-@app.route('/cart/<string:cart_item_id>', methods=['DELETE'])
-def remove_from_cart(cart_item_id):
-    cart_col.delete_one({"_id": ObjectId(cart_item_id)})
-    return jsonify({"message": "Item removed from cart!"})
+    # Record order
+    order = {
+        "transactionId": str(transaction_id),
+        "userId": user_id,
+        "dishes": order_dishes,
+        "totalAmount": total_amount,
+        "status": "pending",
+        "createdAt": datetime.now()
+    }
+    orders_col.insert_one(order)
 
-# Update Item Quantity
-@app.route('/cart/<string:cart_item_id>', methods=['PUT'])
-def update_cart_item(cart_item_id):
-    data = request.json  # Expecting: {"quantity": new_quantity}
-    cart_col.update_one(
-        {"_id": ObjectId(cart_item_id)},
-        {"$set": {"quantity": data["quantity"]}}
-    )
-    return jsonify({"message": "Cart item updated!"})
+    return jsonify({
+        "message": "Order placed successfully!",
+        "transactionId": str(transaction_id),
+        "totalAmount": total_amount
+    })
 
-# Checkout Order (User Enters Phone Number)
-@app.route('/checkout', methods=['POST'])
-def checkout():
-    data = request.json  # Expecting: {"phone_number": "1234567890"}
-    phone_number = data['phone_number']
+# -------------------- REGISTER USER --------------------
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.json
+    username = data.get("username")
+    phone = data.get("phone")
 
-    # (Optional) Store order info here before clearing cart
-    cart_col.delete_many({})
+    if not username or not phone:
+        return jsonify({"error": "Username and phone are required"}), 400
 
-    return jsonify({"message": "Order placed! You will receive an SMS confirmation.", "phone_number": phone_number})
+    existing_user = users_col.find_one({"phone": phone})
+    if existing_user:
+        return jsonify({"error": "Phone number already registered"}), 400
 
+    user = {
+        "username": username,
+        "phone": phone
+    }
+    users_col.insert_one(user)
+    return jsonify({"message": "User registered successfully!"})
+
+# -------------------- GET USER ORDERS --------------------
+@app.route('/orders/<user_id>', methods=['GET'])
+def get_orders(user_id):
+    orders = list(orders_col.find({"userId": user_id}))
+    for o in orders:
+        o["_id"] = str(o["_id"])
+        o["transactionId"] = str(o["transactionId"])
+    return jsonify(orders)
+
+# -------------------- ROOT ENDPOINT --------------------
+@app.route('/')
+def index():
+    return jsonify({"message": "Canteen Dine backend is live!"})
+
+# -------------------- RUN APP --------------------
 if __name__ == '__main__':
     app.run(debug=True)
