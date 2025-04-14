@@ -25,7 +25,9 @@ function NavBar() {
         >
           <span className="cart-icon">
             <span className="cart-text">My Cart</span>
-            <span className="cart-counter">{cart.length}</span> {/* Use cart length */}
+            <span className="cart-counter">
+              {cart.length > 0 ? cart.length : 0} {/* Ensure counter is always displayed */}
+            </span>
           </span>
         </Link>
       </div>
