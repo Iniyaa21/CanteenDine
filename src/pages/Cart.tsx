@@ -72,22 +72,22 @@ function CartPage() {
 
                         {/* Details Section */}
                         <div className="cart-item-details">
-                            <div className="cart-item-header">
-                                <h3 className="cart-item-name">{item.name}</h3>
-                                <div className="cart-item-quantity">
-                                    <button onClick={() => decrementQuantity(item.id)}>-</button>
-                                    <span>{item.quantity}</span>
-                                    <button onClick={() => incrementQuantity(item.id)}>+</button>
-                                </div>
-                            </div>
-                            <p className="cart-item-description">{item.description}</p>
-                            <p className="cart-item-price">${(item.price * item.quantity).toFixed(2)}</p>
+                            <h3>{item.name}</h3>
+                            <p>{item.description}</p>
+                            <span className="cart-item-price">${item.price.toFixed(2)}</span>
+                        </div>
+                        <div className="cart-item-controls">
+                        <div className="quantity-controls">
+                            <button className="quantity-btn" onClick={() => decrementQuantity(item.id)}>-</button>
+                            <span className="quantity-number">{item.quantity}</span>
+                            <button className="quantity-btn" onClick={() => incrementQuantity(item.id)}>+</button>
                         </div>
 
-                        {/* Remove Button */}
-                        <button className="remove-btn" onClick={() => removeItem(item.id)}>
-                            Remove
-                        </button>
+                            <button className="remove-btn" onClick={() => removeItem(item.id)}>
+                                Remove
+                            </button>
+                        </div>
+
                     </div>
                 ))}
             </div>
